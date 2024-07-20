@@ -25,9 +25,8 @@ jobs:
 
     - name: Sync toolchains from GitLab
       run: |
-        git clone --depth=1 https://gitlab.com/mylove90/toolchain.git toolchain
+        git clone --depth=1 -b A156E https://gitlab.com/mylove90/toolchain.git toolchain
         cd toolchain
-        git pull origin A156E
         cp -r * ../Kernel/
 
     - name: Sync Anykernel3
