@@ -12,4 +12,4 @@ export DIST_DIR="../out/target/product/a15x/obj/KERNEL_OBJ"
 export BUILD_CONFIG="../out/target/product/a15x/obj/KERNEL_OBJ/build.config"
 
 cd ../kernel
-./build/build.sh
+./build/build.sh DO_NOT_STRIP_MODULES=0
