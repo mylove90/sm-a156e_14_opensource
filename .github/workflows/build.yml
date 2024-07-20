@@ -52,9 +52,11 @@ jobs:
         cp -f Kernel/out/target/product/a15x/obj/KERNEL_OBJ/*.ko ./AnyKernel3/modules/system/lib/modules/
         cd AnyKernel3/
         zip -r9 a156e-kernel.zip * -x README.md a156e-kernel.zip .git/\* .github/\*
+        mkdir -p ../zip
+        mv a156e-kernel.zip ../zip
 
     - name: Upload AnyKernel3 ZIP
       uses: actions/upload-artifact@v4.3.4
       with:
         name: a156e-kernel.zip
-        file: AnyKernel3/a156e-kernel.zip
+        file: zip/a156e-kernel.zip
