@@ -17,17 +17,23 @@ jobs:
       uses: easimon/maximize-build-space@v10
       with:
         swap-size-mb: 10240
+
     - name: Checkout main repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4.1.7
       with:
         repository: mylove90/sm-a156e_14_opensource
 
     - name: Sync toolchains from GitLab
       run: |
-        git clone --depth=1 -b A156E https://gitlab.com/mylove90/toolchain.git toolchain
+        git clone --depth=1 https://gitlab.com/mylove90/toolchain.git toolchain
         cd toolchain
+        git pull origin A156E
         cp -r * ../Kernel/
 
+    - name: Sync Anykernel3
+      run: |
+        git clone --depth=1 --branch A15 https://github.com/mylove90/AnyKernel3 AnyKernel3
+        
     - name: Set up build environment
       run: |
         sudo apt update
@@ -41,14 +47,15 @@ jobs:
         chmod a+x build_kernel.sh
         bash build_kernel.sh
 
-    - name: Upload kernel image
-      uses: actions/upload-artifact@v2
-      with:
-        name: kernel-image
-        path: out/target/product/a15/obj/KERNEL_OBJ/kernel-5.10/arch/arm64/boot/Image.gz
+    - name: Pack AnyKernel3 ZIP
+      run: |
+        cp -f Kernel/out/target/product/a15x/obj/KERNEL_OBJ/kernel-5.15/arch/arm64/boot/Image.gz ./AnyKernel3/
+        cp -f Kernel/out/target/product/a15x/obj/KERNEL_OBJ/*.ko ./AnyKernel3/modules/system/lib/modules/
+        cd AnyKernel3/
+        zip -r9 a156e-kernel.zip * -x README.md a156e-kernel.zip .git/\* .github/\*
 
-    - name: Upload kernel modules
-      uses: actions/upload-artifact@v2
+    - name: Upload AnyKernel3 ZIP
+      uses: actions/upload-artifact@v4.3.4
       with:
-        name: kernel-modules
-        path: out/target/product/a15/obj/KERNEL_OBJ/*.ko
+        name: a156e-kernel.zip
+        file: AnyKernel3/a156e-kernel.zip
