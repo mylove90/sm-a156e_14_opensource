@@ -48,6 +48,8 @@ jobs:
 
     - name: Pack AnyKernel3 ZIP
       run: |
+        find Kernel/out/ -print | grep -i Image.gz
+        find Kernel/out/ -print | grep -i .ko
         cp -f Kernel/out/target/product/a15x/obj/KERNEL_OBJ/kernel-5.15/arch/arm64/boot/Image.gz ./AnyKernel3/
         cp -f Kernel/out/target/product/a15x/obj/KERNEL_OBJ/*.ko ./AnyKernel3/modules/system/lib/modules/
         cd AnyKernel3/
